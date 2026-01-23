@@ -1,9 +1,0 @@
-<masters>
-<master idx="0" appTimePeriod="1000000" refClockSyncCycles="5">
-<slave idx="0" type="EK1100"/>
-<slave idx="1" type="EL1008"/>
-<slave idx="2" type="EL2008"/>
-<slave idx="3" type="DeADSA3" name="x_axis">
-	<modParam name="opmode" value="CSV"/>
-</master>
-</masters>
