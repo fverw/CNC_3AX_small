@@ -1,6 +1,6 @@
 # Halshow settings
 # This file is generated automatically.
-wm geometry . 1386x885+177+833
+wm geometry . 1386x885+148+545
 placeFrames 0.3
 set ::ratio 0.3
 set ::old_w_leftf 160
@@ -9,13 +9,14 @@ set ::watchlist {
     pin+joint.0.motor-pos-fb
     pin+lcec.0.2.dout-0
     pin+lcec.0.A3_x.srv-oper-enabled
-    pin+lcec.0.A3_x.srv-on-disabled
     pin+lcec.0.A3_x.srv-enable-volt
     pin+lcec.0.A3_x.srv-enable
     pin+lcec.0.A3_x.srv-switch-on
-    pin+lcec.0.A3_x.srv-switched-on
     sig+emc-enable
     sig+x-enable
+    pin+lcec.0.A3_x.srv-on-disabled
+    pin+lcec.0.A3_x.srv-ready
+    pin+lcec.0.A3_x.srv-switched-on
 }
 set ::workmode watchhal
 set ::watchInterval 100

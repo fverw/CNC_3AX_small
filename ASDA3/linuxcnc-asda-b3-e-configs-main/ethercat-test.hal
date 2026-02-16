@@ -6,58 +6,49 @@ loadrt [KINS]KINEMATICS
 loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
 loadusr -W lcec_conf ethercat-conf.xml
 loadrt lcec
+loadrt timedelay count=3
+loadrt not count=1
 
-###loadrt cia402 count=1
-###
-###setp cia402.0.csp-mode 1
-###setp cia402.0.pos-scale 10000
-
+addf not.0						servo-thread
+addf timedelay.0				servo-thread
 addf lcec.read-all            servo-thread
-
-###addf cia402.0.read-all        servo-thread
-
 addf motion-command-handler   servo-thread
 addf motion-controller        servo-thread
-
-###addf cia402.0.write-all       servo-thread
-
 addf lcec.write-all           servo-thread
-
 
 #########################################
 #nets
 #########################################
+
+###E-Stop
 net emc-enable iocontrol.0.user-enable-out iocontrol.0.emc-enable-in
-### sets emc-enable 1
 
 ### Activate Drives when EMC off
+# Power to Drive
 net emc-enable => lcec.0.2.dout-0
-net emc-enable => lcec.0.2.dout-1
+
+# Enable Voltage to Drive
+setp timedelay.0.on-delay 0.1 # 1-second delay
+setp timedelay.0.off-delay 0.0 # No off delay
+net emc-enable 		=> timedelay.0.in 
+net timedelay0 <= timedelay.0.out
+net timedelay0 => lcec.0.A3_x.srv-enable-volt
+
+# Enable Drive
+net servo-on-enabled-in not.0.in <= lcec.0.A3_x.srv-on-disabled
+net servo-on-enabled-out lcec.0.A3_x.srv-enable <= not.0.out
+
+# Activate Drive
+net x-enable => lcec.0.A3_x.srv-switch-on
 
 
-#
-# Joint 0
-#
+### net emc-enable => lcec.0.2.dout-1
 
-### setp cia402.0.csp-mode 1
-### setp cia402.0.pos-scale 800
+#*******************
+#  AXIS X
+#*******************
 setp lcec.0.A3_x.pos-scale 10
-#from motion to cia
 
-##### net 0-home-index <= joint.0.index-enable  ## => cia402.0.home
-##### net 0-enable     <= joint.0.amp-enable-out => cia402.0.enable
-##### net 0-amp-fault  => joint.0.amp-fault-in   <= cia402.0.drv-fault
-##### net 0-pos-cmd    <= joint.0.motor-pos-cmd  => cia402.0.pos-cmd
-##### net 0-pos-fb     => joint.0.motor-pos-fb   <= cia402.0.pos-fb
-##### #net 0-home          lcec.0.0.in-5          => joint.0.home-sw-in
-
-
-
-####  #*******************
-####  #  AXIS X
-####  #*******************
-####  
-####  
 # --- joint signals for motion
 
 net x-pos-cmd    	<= joint.0.motor-pos-cmd
@@ -68,37 +59,6 @@ net x-enable     	<= joint.0.amp-enable-out
 
 net x-pos-cmd    	=> lcec.0.A3_x.srv-pos-cmd
 net x-pos-fb     	=> lcec.0.A3_x.enc-pos-enc
-###net x-enable 		=> lcec.0.A3_x.srv-enable-volt
-###net x-enable 		=> lcec.0.A3_x.srv-enable
-###net x-enable 		=> lcec.0.A3_x.srv-switch-on
-
-### loadrt timedelay count = 3 
-### setp timedelay.0.on-delay 1.0 # 1-second delay
-### setp timedelay.0.off-delay 0.0 # No off delay
 
 
-### net x-enable		=> lcec.0.2.dout-4
 
-###					lcec.0.A3_x.srv-enable-volt
-### net lcec.0.A3_x.srv-enable-volt => 
-####  ### 
-####  ### # --- from stepper(ethercat) to cia402
-####  ### 
-####  ### net x-statusword      lcec.0.0.cia-statusword  => cia402.0.statusword
-####  ### net x-opmode-display  lcec.0.0.opmode-display  => cia402.0.opmode-display
-####  ### net x-drv-act-pos     lcec.0.0.actual-position => cia402.0.drv-actual-position
-####  ### net x-drv-act-velo    lcec.0.0.actual-velocity => cia402.0.drv-actual-velocity
-####  ### 
-####  ### # --- from cia402 to stepper(ethercat) 
-####  ### 
-####  ### net x-controlword         cia402.0.controlword         => lcec.0.0.cia-controlword
-####  ### net x-modes-of-operation  cia402.0.opmode              => lcec.0.0.opmode
-####  ### net x-drv-target-pos      cia402.0.drv-target-position => lcec.0.0.target-position
-####  ### net x-drv-target-velo     cia402.0.drv-target-velocity => lcec.0.0.target-velocity
-####  
-####  #*********************
-####  #   E-STOP
-####  #*********************
-####  
-####  setp iocontrol.0.emc-enable-in 1
-####  
