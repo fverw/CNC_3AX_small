@@ -1,0 +1,26 @@
+# Halshow settings
+# This file is generated automatically.
+wm geometry . 1386x885+177+833
+placeFrames 0.3
+set ::ratio 0.3
+set ::old_w_leftf 160
+set ::watchlist {
+    pin+lcec.0.A3_x.enc-pos-enc
+    pin+joint.0.motor-pos-fb
+    pin+lcec.0.2.dout-0
+    pin+lcec.0.A3_x.srv-oper-enabled
+    pin+lcec.0.A3_x.srv-on-disabled
+    pin+lcec.0.A3_x.srv-enable-volt
+    pin+lcec.0.A3_x.srv-enable
+    pin+lcec.0.A3_x.srv-switch-on
+    pin+lcec.0.A3_x.srv-switched-on
+    sig+emc-enable
+    sig+x-enable
+}
+set ::workmode watchhal
+set ::watchInterval 100
+set ::col1_width 100
+set ::ffmts 
+set ::ifmts 
+set ::alwaysOnTop 0
+set ::autoSaveWatchlist 1
