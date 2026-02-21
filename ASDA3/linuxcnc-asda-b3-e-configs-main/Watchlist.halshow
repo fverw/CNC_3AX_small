@@ -1,1 +1,0 @@
-pin+lcec.0.A3_x.enc-pos-enc pin+joint.0.motor-pos-fb pin+lcec.0.2.dout-0 pin+lcec.0.A3_x.srv-oper-enabled pin+lcec.0.A3_x.srv-enable-volt pin+lcec.0.A3_x.srv-enable pin+lcec.0.A3_x.srv-switch-on sig+emc-enable sig+x-enable pin+lcec.0.A3_x.srv-on-disabled pin+lcec.0.A3_x.srv-ready pin+lcec.0.A3_x.srv-switched-on
