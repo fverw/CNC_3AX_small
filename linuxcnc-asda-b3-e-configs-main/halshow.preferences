@@ -1,0 +1,44 @@
+# Halshow settings
+# This file is generated automatically.
+wm geometry . 1386x885+2310+662
+placeFrames 0.3
+set ::ratio 0.3
+set ::old_w_leftf 160
+set ::watchlist {
+    pin+joint.0.motor-pos-fb
+    pin+lcec.0.A3_x.srv-oper-enabled
+    pin+lcec.0.A3_x.srv-enable-volt
+    pin+lcec.0.A3_x.srv-enable
+    pin+lcec.0.A3_x.srv-switch-on
+    sig+emc-enable
+    sig+x-enable
+    pin+lcec.0.A3_x.srv-on-disabled
+    pin+lcec.0.A3_x.srv-ready
+    pin+lcec.0.A3_x.srv-switched-on
+    pin+lcec.0.A3_y.srv-switched-on
+    pin+lcec.0.A3_z.srv-switched-on
+    pin+lcec.0.2.dout-0
+    pin+lcec.0.2.dout-1
+    pin+lcec.0.A3_x.srv-fault-reset
+    pin+lcec.0.A3_y.srv-fault-reset
+    pin+lcec.0.A3_z.srv-fault-reset
+    sig+z-pos-cmd
+    sig+z-pos-fb
+    sig+y-pos-fb
+    sig+y-pos-cmd
+    sig+x-pos-fb
+    sig+x-pos-cmd
+    pin+lcec.0.A3_x.din-neg-lim
+    pin+lcec.0.A3_x.din-pos-lim
+    pin+lcec.0.A3_y.din-neg-lim
+    pin+lcec.0.A3_y.din-pos-lim
+    pin+lcec.0.A3_z.din-neg-lim
+    pin+lcec.0.A3_z.din-pos-lim
+}
+set ::workmode watchhal
+set ::watchInterval 100
+set ::col1_width 100
+set ::ffmts 
+set ::ifmts 
+set ::alwaysOnTop 0
+set ::autoSaveWatchlist 1

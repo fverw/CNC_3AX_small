@@ -1,0 +1,124 @@
+###########################################################
+# Setup
+###########################################################
+
+loadrt [KINS]KINEMATICS
+loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
+loadusr -W lcec_conf ethercat-conf.xml
+loadrt lcec
+loadrt timedelay count=6
+loadrt not count=3
+
+addf not.0						servo-thread
+addf not.1						servo-thread
+addf not.2						servo-thread
+addf lcec.read-all            servo-thread
+addf motion-command-handler   servo-thread
+addf motion-controller        servo-thread
+addf lcec.write-all           servo-thread
+
+#########################################
+#nets
+#########################################
+
+###E-Stop
+net emc-enable iocontrol.0.user-enable-out iocontrol.0.emc-enable-in
+
+### Activate Drives when EMC off
+# Power to Drive
+### net emc-enable => lcec.0.2.dout-0
+### net emc-enable => lcec.0.2.dout-1
+
+
+# Enable Voltage to Drive
+# X
+net x-enable	=> lcec.0.A3_x.srv-enable-volt
+
+#Y
+net y-enable 	=> lcec.0.A3_y.srv-enable-volt
+
+#Z
+net z-enable 	=> lcec.0.A3_z.srv-enable-volt
+
+
+# Enable Drive
+#X
+net servoX-on-enabled-in 	not.0.in 				<= 	lcec.0.A3_x.srv-on-disabled
+net servoX-on-enabled-out 	lcec.0.A3_x.srv-enable 	<= 	not.0.out
+
+###  #Y
+net servoY-on-enabled-in 	not.1.in 				<= 	lcec.0.A3_y.srv-on-disabled
+net servoY-on-enabled-out 	lcec.0.A3_y.srv-enable 	<= 	not.1.out
+
+#Z
+net servoZ-on-enabled-in 	not.2.in 				<= 	lcec.0.A3_z.srv-on-disabled
+net servoZ-on-enabled-out 	lcec.0.A3_z.srv-enable 	<= 	not.2.out
+
+
+# Activate Drive
+#X
+net servoX-ready	        <=	lcec.0.A3_x.srv-ready
+net	servoX-ready			=>	lcec.0.A3_x.srv-switch-on
+
+
+#Y
+net servoY-ready	        <=	lcec.0.A3_y.srv-ready
+net	servoY-ready			=>	lcec.0.A3_y.srv-switch-on
+
+#Z
+net servoZ-ready	        <=	lcec.0.A3_z.srv-ready
+net	servoZ-ready			=>	lcec.0.A3_z.srv-switch-on
+
+
+#*******************
+#  AXIS X
+#*******************
+setp lcec.0.A3_x.pos-scale 10
+
+# --- joint signals for motion
+
+net x-pos-cmd    	<= joint.0.motor-pos-cmd
+net x-pos-fb     	<= joint.0.motor-pos-fb
+net x-enable     	<= joint.0.amp-enable-out
+
+# --- connect servo driver to joint
+
+net x-pos-cmd    	=> lcec.0.A3_x.srv-pos-cmd
+net x-pos-fb     	=> lcec.0.A3_x.enc-pos-enc
+
+#*******************
+#  AXIS Y
+#*******************
+setp lcec.0.A3_y.pos-scale 10
+
+# --- joint signals for motion
+
+net y-pos-cmd    	<= joint.1.motor-pos-cmd
+net y-pos-fb     	<= joint.1.motor-pos-fb
+net y-enable     	<= joint.1.amp-enable-out
+
+# --- connect servo driver to joint
+
+net y-pos-cmd    	=> lcec.0.A3_y.srv-pos-cmd
+net y-pos-fb     	=> lcec.0.A3_y.enc-pos-enc
+
+
+#*******************
+#  AXIS Z
+#*******************
+setp lcec.0.A3_z.pos-scale 10
+
+# --- joint signals for motion
+
+net z-pos-cmd    	<= joint.2.motor-pos-cmd
+net z-pos-fb     	<= joint.2.motor-pos-fb
+net z-enable     	<= joint.2.amp-enable-out
+
+# --- connect servo driver to joint
+
+net z-pos-cmd    	=> lcec.0.A3_z.srv-pos-cmd
+net z-pos-fb     	=> lcec.0.A3_z.enc-pos-enc
+
+
+
+
