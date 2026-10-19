@@ -34,6 +34,7 @@ set ::watchlist {
     pin+lcec.0.A3_y.din-pos-lim
     pin+lcec.0.A3_z.din-neg-lim
     pin+lcec.0.A3_z.din-pos-lim
+    pin+lcec.0.2.dout-7
 }
 set ::workmode watchhal
 set ::watchInterval 100

@@ -6,8 +6,10 @@ loadrt [KINS]KINEMATICS
 loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
 loadusr -W lcec_conf ethercat-conf.xml
 loadrt lcec
-loadrt timedelay count=6
 loadrt not count=3
+
+# Summe aller Achsen: nach 3000 mm Gesamtweg schmieren
+loadusr -Wn lubedist python3 lubedist.py --channels x,y,z --mode sum --distance 100 --pulse-time 0.5
 
 addf not.0						servo-thread
 addf not.1						servo-thread
@@ -120,5 +122,16 @@ net z-pos-cmd    	=> lcec.0.A3_z.srv-pos-cmd
 net z-pos-fb     	=> lcec.0.A3_z.enc-pos-enc
 
 
+#*************************
+# LUBE
+#*************************
 
+net x-pos-cmd  => lubedist.x.pos
+net y-pos-cmd  => lubedist.y.pos
+net z-pos-cmd  => lubedist.z.pos
+
+net lube-pulse lubedist.sum.pulse => lcec.0.2.dout-7
+
+# optional: nur zählen, wenn die Maschine an ist
+net machine-on halui.machine.is-on => lubedist.enable
 
